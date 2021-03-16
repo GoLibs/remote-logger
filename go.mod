@@ -1,4 +1,4 @@
-module github.com/golibs/remote-logger
+module github.com/GoLibs/remote-logger
 
 go 1.14
 
