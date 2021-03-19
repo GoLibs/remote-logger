@@ -110,13 +110,29 @@ func (rl *RemoteLogger) SendTextToDefaultDiscordWebhook(text string) (err error)
 	return
 }
 
+func (rl *RemoteLogger) SendTextTotDiscordWebhook(webhook string, text string) (err error) {
+	r := rl.r.R()
+	_, err = r.SetHeader("Content-Type", "application/json").SetBody(map[string]string{
+		"content": text,
+	}).Post(webhook)
+	return
+}
+
 func (rl *RemoteLogger) SendTextToDefaultTelegramChat(text string) (err error) {
 	if rl.telegramBotClient == nil {
 		err = errors.New("telegram_bot_client_not_initialised")
 		return
 	}
-	text = rl.formatText(text)
 	_, err = rl.telegramBotClient.Send(rl.telegramBotClient.Message().SetChatId(rl.defaultTelegramChatId).SetText(text))
+	return
+}
+
+func (rl *RemoteLogger) SendTextToTelegramChat(chatId int64, text string) (err error) {
+	if rl.telegramBotClient == nil {
+		err = errors.New("telegram_bot_client_not_initialised")
+		return
+	}
+	_, err = rl.telegramBotClient.Send(rl.telegramBotClient.Message().SetChatId(chatId).SetText(text))
 	return
 }
 
