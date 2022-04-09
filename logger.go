@@ -4,20 +4,19 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"github.com/go-resty/resty/v2"
 	"os"
 	"sync"
 	"time"
 
-	"github.com/go-resty/resty/v2"
-
-	go_telegram_bot_api "github.com/GoLibs/telegram-bot-api"
+	"github.com/aliforever/go-telegram-bot-api"
 )
 
 type RemoteLogger struct {
 	fileMutex                sync.Mutex
 	filesMutex               map[string]*sync.Mutex
 	telegramBotToken         string
-	telegramBotClient        *go_telegram_bot_api.TelegramBot
+	telegramBotClient        *tgbotapi.TelegramBot
 	defaultDiscordWebhookUrl string
 	tz                       *time.Location
 	defaultLogDirectory      string
@@ -86,7 +85,7 @@ func (rl *RemoteLogger) SetDiscordWebhookUrl(address string) {
 
 func (rl *RemoteLogger) SetTelegramBotToken(t string) (err error) {
 	rl.telegramBotToken = t
-	rl.telegramBotClient, err = go_telegram_bot_api.NewTelegramBot(t)
+	rl.telegramBotClient, err = tgbotapi.NewTelegramBot(t)
 	if err != nil {
 		return
 	}
